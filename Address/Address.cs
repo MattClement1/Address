@@ -1,7 +1,7 @@
 ﻿/*
 *Created by: Matthew Clement
-*Created on: 02-Nov-2015
-*Created for: Unit #4-03
+*Created on: 26-Nov-2015
+*Created for: Unit #6-04
 *This program displays the inputted address
 */
 
@@ -19,14 +19,49 @@ namespace Address
 {
     public partial class frmAddress : Form
     {
-        private void ShowAddress(string aptNumber, string streetAddress, string city, string province, string postalCode)
+        public enum PROVINCES
         {
-            MessageBox.Show("Apartment " + aptNumber + ", " + streetAddress + ", " + city + ", " + province + ", " + postalCode);
+            NL,
+            PE,
+            NS,
+            NB,
+            QC,
+            ON,
+            MB,
+            SK,
+            AB,
+            BC,
+            YT,
+            NT,
+            NU
+        }
+        public enum STREET_TYPE
+        {
+            Dr,
+            Cres,
+            Ave,
+            St,
+            Blvd
         }
 
-        private void ShowAddress(string streetAddress, string city, string province, string postalCode)
+        public struct Address
         {
-            MessageBox.Show(streetAddress + ", " + city + ", " + province + ", " + postalCode);
+            public string aptNumber;
+            public string streetAddress;
+            public string city;
+            public PROVINCES province;
+            public STREET_TYPE streetType;
+            public string postalCode;
+        }
+
+        private void ShowAddress(string aptNumber, string streetAddress, Enum streetType, string city, Enum province, string postalCode)
+        {
+            MessageBox.Show("Apartment " + aptNumber + ", " + streetAddress + " " + streetType + ", " + city + ", " + province + ", " + postalCode);
+        }
+
+        private void ShowAddress(string streetAddress, Enum streetType, string city, Enum province, string postalCode)
+        {
+            MessageBox.Show(streetAddress  + " " + streetType + ", " + city + ", " + province + ", " + postalCode);
         }
 
         public frmAddress()
@@ -36,19 +71,24 @@ namespace Address
 
         private void btnShowAddress_Click(object sender, EventArgs e)
         {
-            string aptNumberInput = this.txtAptNumber.Text;
-            string streetAddressInput = this.txtStreetAddress.Text;
-            string cityInput = this.txtCity.Text;
-            string provinceInput = this.txtProvince.Text;
-            string postalCodeInput = this.txtPostalCode.Text;
+            Address address = new Address();
+            address.aptNumber = this.txtAptNumber.Text;
+            address.streetAddress = this.txtStreetAddress.Text;
+            address.city = this.txtCity.Text;
+            string selectedProvince = this.cboProvinces.Text;
+            address.province = (PROVINCES)Enum.Parse(typeof(PROVINCES), selectedProvince, true);
+            string selectedType = this.cboStreetType.Text;
+            address.streetType = (STREET_TYPE)Enum.Parse(typeof(STREET_TYPE), selectedType, true);
 
-            if (aptNumberInput == "")
+            address.postalCode = this.txtPostalCode.Text;
+
+            if (address.aptNumber == "")
             {
-                ShowAddress(streetAddressInput, cityInput, provinceInput, postalCodeInput);
+                ShowAddress(address.streetAddress, address.streetType, address.city, address.province, address.postalCode);
             }
             else
             {
-                ShowAddress(aptNumberInput, streetAddressInput, cityInput, provinceInput, postalCodeInput);
+                ShowAddress(address.aptNumber, address.streetAddress, address.streetType, address.city, address.province, address.postalCode);
             }
             
         }
